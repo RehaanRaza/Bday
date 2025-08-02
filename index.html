@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #ffebee; /* Lighter, more vibrant pink */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            color: #333;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            max-width: 90%;
+            padding: 2rem;
+            background-color: #fff;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            color: #d81b60; /* Deep pink */
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        p {
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            margin-bottom: 2rem;
+            color: #666;
+        }
+
+        #countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .countdown-box {
+            background-color: #ff80ab; /* Bright pink */
+            padding: 1.5rem;
+            border-radius: 1rem;
+            width: 8rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .countdown-box:hover {
+            transform: scale(1.05);
+        }
+
+        .countdown-number {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .countdown-label {
+            font-size: clamp(0.8rem, 1.5vw, 1rem);
+            color: #fff;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        #birthday-message {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            text-align: center;
+        }
+
+        .animated-text {
+            font-size: clamp(3rem, 7vw, 5rem);
+            font-weight: 800;
+            color: #d81b60;
+            animation: bounceIn 1s ease-in-out;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        .surprise-button {
+            padding: 1rem 2.5rem;
+            background-color: #d81b60;
+            color: #ffffff;
+            border-radius: 9999px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .surprise-button:hover {
+            background-color: #ad1457;
+            transform: translateY(-5px);
+        }
+
+        /* Emoji Rain Animation */
+        .emoji-rain-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 5;
+        }
+
+        .emoji-rain {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0;
+            animation: emoji-fall 7s linear infinite;
+        }
+
+        @keyframes emoji-fall {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        .cartoon-emoji {
+            font-size: 5rem;
+            margin-top: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .message-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            backdrop-filter: blur(5px);
+            animation: fadeInOverlay 0.5s forwards;
+        }
+        
+        @keyframes fadeInOverlay {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .message-modal {
+            background-color: #fff;
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            max-width: 90%;
+            width: 500px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            animation: scaleIn 0.5s forwards;
+        }
+        
+        @keyframes scaleIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-message {
+            font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+            font-weight: 600;
+            color: #d81b60;
+            margin-bottom: 1.5rem;
+            animation: fadeInMessage 1s ease-in-out;
+        }
+        
+        @keyframes fadeInMessage {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: #888;
+            transition: color 0.2s ease;
+        }
+        
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .modal-next-btn {
+            padding: 0.75rem 1.5rem;
+            background-color: #d81b60;
+            color: #fff;
+            border-radius: 9999px;
+            cursor: pointer;
+            border: none;
+            margin-top: 1.5rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-next-btn:hover {
+            background-color: #ad1457;
+        }
+        
+        #final-message {
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            color: #d81b60;
+            font-weight: 800;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main page container -->
+    <div class="container">
+        
+        <!-- Countdown section -->
+        <div id="countdown-section" class="flex flex-col items-center">
+            <h1>A Special Surprise is Coming!</h1>
+            <p>I can't wait to celebrate you. Let's countdown the moments until November 12th.</p>
+
+            <div id="countdown-container">
+                <div class="countdown-box">
+                    <div id="days" class="countdown-number">0</div>
+                    <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-box">
+                    <div id="hours" class="countdown-number">0</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-box">
+                    <div id="minutes" class="countdown-number">0</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-box">
+                    <div id="seconds" class="countdown-number">0</div>
+                    <div class="countdown-label">Seconds</div>
+                </div>
+            </div>
+            
+            <!-- Cartoon emoji -->
+            <div class="cartoon-emoji">💖</div>
+        </div>
+
+        <!-- Birthday message section (hidden by default) -->
+        <div id="birthday-message" class="flex flex-col items-center">
+            <div class="emoji-rain-container"></div>
+            <h1 class="animated-text">Happy Birthday!</h1>
+            <p>To the love of my life, my best friend, and my greatest adventure. I hope your day is as amazing as you are. I love you so much!</p>
+            <button class="surprise-button" onclick="showSurprise()">Click for a beautiful message!</button>
+        </div>
+    </div>
+
+    <!-- Message Modal Overlay (hidden by default) -->
+    <div id="message-modal-overlay" class="message-modal-overlay">
+        <div class="message-modal">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <p id="modal-message" class="modal-message"></p>
+            <button id="modal-next-btn" class="modal-next-btn" onclick="nextMessage()">Next Message</button>
+        </div>
+    </div>
+
+    <script>
+        // Set the date we're counting down to (November 12th)
+        // You can change the year and time here!
+        const countDownDate = new Date("November 12, 2025 00:00:00").getTime();
+        
+        const countdownSection = document.getElementById("countdown-section");
+        const birthdayMessageSection = document.getElementById("birthday-message");
+        const emojiRainContainer = document.querySelector(".emoji-rain-container");
+        const messageModalOverlay = document.getElementById("message-modal-overlay");
+        const modalMessage = document.getElementById("modal-message");
+        const modalNextBtn = document.getElementById("modal-next-btn");
+
+        // Array of beautiful messages
+        const messages = [
+            "You are the light of my life. Happy Birthday, my love!",
+            "Every day with you is a gift. Thank you for being you. ❤️",
+            "I can't wait to celebrate all your birthdays with you. To a future full of love and happiness!",
+            "I'm so lucky to have you. I love you more than words can say!",
+            // Final surprise message
+            "My love, you're not just my girlfriend, you're my soulmate. I'm so excited for everything our future holds together. Happy Birthday, my queen! 👑"
+        ];
+        let messageIndex = 0;
+        
+        const emojis = ['🎂', '🎁', '💖', '🎉', '🥳', '🎈', '❤️', '🌟'];
+
+        // Update the countdown every 1 second
+        const x = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            if (distance > 0) {
+                document.getElementById("days").innerHTML = days;
+                document.getElementById("hours").innerHTML = hours;
+                document.getElementById("minutes").innerHTML = minutes;
+                document.getElementById("seconds").innerHTML = seconds;
+            }
+
+            if (distance < 0) {
+                clearInterval(x);
+                countdownSection.style.display = "none";
+                birthdayMessageSection.style.display = "flex";
+                createEmojiRain();
+            }
+        }, 1000);
+
+        // Function to create emoji rain animation
+        function createEmojiRain() {
+            for (let i = 0; i < 100; i++) {
+                const emoji = document.createElement('div');
+                emoji.classList.add('emoji-rain');
+                emoji.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                emoji.style.left = Math.random() * 100 + 'vw';
+                emoji.style.animationDelay = Math.random() * -7 + 's';
+                emoji.style.fontSize = Math.random() * 2 + 1 + 'rem';
+                emojiRainContainer.appendChild(emoji);
+            }
+        }
+        
+        // Function to show the modal with the first message
+        function showSurprise() {
+            messageIndex = 0;
+            modalMessage.innerHTML = messages[messageIndex];
+            modalMessage.id = 'modal-message'; // Reset ID
+            modalNextBtn.style.display = 'block';
+            messageModalOverlay.style.display = "flex";
+        }
+        
+        // Function to show the next message
+        function nextMessage() {
+            messageIndex++;
+            modalMessage.style.animation = 'none';
+            void modalMessage.offsetWidth; // Trigger reflow to restart animation
+            modalMessage.style.animation = 'fadeInMessage 1s ease-in-out';
+            
+            if (messageIndex < messages.length) {
+                modalMessage.innerHTML = messages[messageIndex];
+            }
+            
+            if (messageIndex === messages.length - 1) {
+                modalNextBtn.style.display = 'none';
+                modalMessage.id = 'final-message';
+            }
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            messageModalOverlay.style.display = "none";
+        }
+    </script>
+</body>
+</html>
